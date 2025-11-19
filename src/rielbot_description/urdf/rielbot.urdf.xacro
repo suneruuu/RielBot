@@ -8,5 +8,6 @@
 
     <xacro:include filename="$(find rielbot_description)/urdf/rielbot_platform.xacro" />
     <xacro:include filename="$(find rielbot_description)/urdf/rielbot_gazebo.xacro" />
+    <xacro:include filename="$(find rielbot_description)/urdf/rielbot_ros2_control.xacro" /> 
 
 </robot>
