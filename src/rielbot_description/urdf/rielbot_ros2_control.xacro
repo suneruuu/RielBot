@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-
-
-<robot name="rielbot" xmlns:xacro="http://www.ros.org/wiki/xacro"> Define the vehicles hardware,
-    command and state interfaces <ros2_control name="GazeboSimSystem" type="system">
+<robot name="rielbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- ros2_control interfaces for rielbot -->
+    <ros2_control name="GazeboSimSystem" type="system">
         <hardware>
             <plugin>gz_ros2_control/GazeboSimSystem</plugin>
         </hardware>
+
         <joint name="front_left_wheel_joint">
             <command_interface name="velocity">
                 <param name="min">-1</param>
@@ -14,6 +14,7 @@
             <state_interface name="position" />
             <state_interface name="velocity" />
         </joint>
+
         <joint name="front_right_wheel_joint">
             <command_interface name="velocity">
                 <param name="min">-1</param>
@@ -22,6 +23,7 @@
             <state_interface name="position" />
             <state_interface name="velocity" />
         </joint>
+
         <joint name="rear_left_wheel_joint">
             <command_interface name="velocity">
                 <param name="min">-1</param>
@@ -30,6 +32,7 @@
             <state_interface name="position" />
             <state_interface name="velocity" />
         </joint>
+
         <joint name="rear_right_wheel_joint">
             <command_interface name="velocity">
                 <param name="min">-1</param>
@@ -40,8 +43,8 @@
         </joint>
     </ros2_control>
 
-    <!-- ROS2 Control plugin and topic re-mapping -->
-  <gazebo>
+    <!-- ROS 2 Control plugin and topic remapping for Gazebo -->
+    <gazebo>
         <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
             <parameters>$(find rielbot_controller)/config/rielbot_controller.yaml</parameters>
             <ros>
@@ -49,5 +52,4 @@
             </ros>
         </plugin>
     </gazebo>
-
 </robot>

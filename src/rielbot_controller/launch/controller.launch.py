@@ -30,6 +30,18 @@ def generate_launch_description():
         parameters=[{"robot_description": robot_description}]
         )
 
+    # ros2_control controller manager (hardware + controllers configuration)
+    ros2_control_node = Node(
+        package='controller_manager',
+        executable='ros2_control_node',
+        name='controller_manager',
+        parameters=[
+            {"robot_description": robot_description},
+            config_controller,
+        ],
+        output='screen',
+    )
+
 
     # joint_state_broadcaster (jsb): position, velocity of the joints
     joint_state_broadcaster_spawner = Node(
@@ -62,6 +74,7 @@ def generate_launch_description():
     return LaunchDescription(
         [
             robot_state_publisher, 
+            ros2_control_node,
             joint_state_broadcaster_spawner,
             controller_spawner_delayed,
         ]

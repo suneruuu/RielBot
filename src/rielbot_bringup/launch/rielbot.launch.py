@@ -4,26 +4,30 @@ from launch.actions import IncludeLaunchDescription, TimerAction, RegisterEventH
 from ament_index_python.packages import get_package_share_directory
 from launch.event_handlers import OnProcessExit
 
+# Launch the file
+# ros2 launch rielbot_bringup rielbot.launch.py
+
 def generate_launch_description():
-    ld = LaunchDescription()
-
-    description_pkg_path = get_package_share_directory("rielbot_description")
-    controller_pkg_path = get_package_share_directory("rielbot_controller")
-
-    # Launch rviz2 from pck description
+    
+    # Path to the package description
+    pkg_path_description = get_package_share_directory("rielbot_description")
+    pkg_path_controller = get_package_share_directory("rielbot_controller")
+    
+    # Launch rviz
     display = IncludeLaunchDescription(
-        os.path.join(description_pkg_path, "launch", "display.launch.py")
+        os.path.join(pkg_path_description,"launch","display.launch.py"),
     )
     
-    # Launch gazebo from pck description
+    # Launch gazebo
     gazebo = IncludeLaunchDescription(
-        os.path.join(description_pkg_path, "launch", "gazebo.launch.py")
+        os.path.join(pkg_path_description, "launch", "gazebo.launch.py"),
     )
-
+    
+    # Launch the controller manager
     controller = IncludeLaunchDescription(
-        os.path.join(controller_pkg_path, "launch", "controller.launch.py")
+        os.path.join(pkg_path_controller,"launch","controller.launch.py"),
     )
-
+    
     # Launch the controller manager 3s after gazebo, to make sure the robot has spawned in simulation
     controller_delayed = TimerAction(
         period = 3., 
@@ -32,13 +36,13 @@ def generate_launch_description():
     
     # Launch the teleop keyboard node
     teleopkeyboard = IncludeLaunchDescription(
-        os.path.join(controller_pkg_path,"launch","teleopkeyboard.launch.py"),
+        os.path.join(pkg_path_controller,"launch","teleopkeyboard.launch.py"),
         launch_arguments={"use_sim_time": "True"}.items()
     )
-
-    ld.add_action(display)
-    ld.add_action(gazebo)
-    ld.add_action(controller_delayed)
-    ld.add_action(teleopkeyboard)
-
-    return ld
+    
+    return LaunchDescription([
+        display, 
+        gazebo,
+        controller_delayed, 
+        teleopkeyboard,
+    ])
